@@ -1,0 +1,87 @@
+	@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+ 
+*{
+ 
+  margin: 0;
+ 
+  padding: 0;
+ 
+  box-sizing: border-box;
+ 
+  font-family: 'Poppins',sans-serif;
+ 
+}
+ 
+body{
+ 
+  display: flex;
+ 
+  justify-content: center;
+ 
+  align-items: center;
+ 
+  padding: 10px;
+ 
+background: #fe8100; 
+}
+ 
+.container{
+ 
+  max-width: 900px;
+ 
+  width: 100%;
+ 
+  background-color: #fff;
+ 
+  padding: 25px 30px;
+ 
+  border-radius: 5px;
+ 
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+ 
+}
+.container .image{
+	display: block; 
+	position:relative; 
+	left:350px; 
+	border: red;
+	margin-bottom:50px;
+}
+.container .image img{
+width:150px; 
+height: 150px; 
+border:5px solid #ff8100;
+
+}
+.personal {
+	padding-bottom:150px;
+}
+.eduction,.pitch{
+	padding-bottom: 50px;
+}
+table tr td{
+	padding: 5px 20px;
+	text-align: left;
+}
+table tr td i{
+	color: grey;
+}
+.username{
+	text-align:center; 
+	padding: 0px 100px;
+}
+.table {
+	border-top: 1px solid black;
+}
+.table .right-table{
+	float: right;
+}
+.table .left-table{
+	float: left;
+}
+.pitch .table p{
+	font-size:20px; 
+	font-weight:20px; 
+	text-align:center; 
+	padding:10px 50px;
+}
