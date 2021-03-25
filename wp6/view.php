@@ -2,86 +2,15 @@
 <html>
 <head>
 	<title>WP6</title>
-<style>
-	@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
- 
-*{
- 
-  margin: 0;
- 
-  padding: 0;
- 
-  box-sizing: border-box;
- 
-  font-family: 'Poppins',sans-serif;
- 
-}
- 
-body{
- 
-  display: flex;
- 
-  justify-content: center;
- 
-  align-items: center;
- 
-  padding: 10px;
- 
-background: #fe8100; 
-}
- 
-.container{
- 
-  max-width: 900px;
- 
-  width: 100%;
- 
-  background-color: #fff;
- 
-  padding: 25px 30px;
- 
-  border-radius: 5px;
- 
-  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
- 
-}
-.container .image{
-	display: block; 
-	position:relative; 
-	left:350px; 
-	border: red;
-	margin-bottom:50px;
-}
-.container .image img{
-width:150px; 
-height: 150px; 
-border:5px solid #ff8100;
-
-}
-.personal {
-	padding-bottom:150px;
-}
-.eduction,.pitch{
-	padding-bottom: 50px;
-}
-table tr td{
-	padding: 5px 20px;
-	text-align: left;
-}
-table tr td i{
-	color: grey;
-}
-</style>
+	<link rel="stylesheet" type="text/css" href="view_style.css">
 </head>
 <body>
 <?php
 include "connection.php";
 session_start();
-$fname=$_SESSION['fname'];
-$lname=$_SESSION['lname'];
-$result = $conn->query("SELECT * FROM profile WHERE firstname='$fname' AND lastname='$lname'");
-unset($_SESSION['fname']);
-unset($_SESSION['fname']);
+$id=$_SESSION['id'];
+$result = $conn->query("SELECT * FROM profile WHERE userid='$id'");
+unset($_SESSION['id']);
 session_destroy();
 
 if($result){
@@ -90,7 +19,7 @@ if($obj = $result->fetch_object()) {
 			<div class="image">
 			<img src="./image/'.$obj->files.'"/>	
 			</div>
-			<div class="username" style="text-align:center; padding: 0px 100px;">
+			<div class="username">
 				<h1><b>'.$obj->firstname.' '.$obj->lastname.'</b></h1><br>';
 				if ($obj->gender==='Male') {
 				echo '<p align="center">Mr. '.$obj->firstname.' did his '.$obj->graduation.' in '.$obj->spec.' From '.$obj->college.' in the year '.$obj->gyear.'.He is highly skilled in '.$obj->preskill.'.He lives in '.$obj->city.' and can be contacted via '.$obj->email.'.</p>';
@@ -104,9 +33,9 @@ if($obj = $result->fetch_object()) {
 			</div>
 			<div class="personal">
 			<h3><b>PERSONAL</b></h3>
-			<div class="table" style="border-top: 1px solid black;"	>
+			<div class="table">
 				<br>
-				<table style="float:left;">	
+				<table class="left-table">	
 					<tr>
 					
 						<td><i>First Name:</i></td>
@@ -124,7 +53,7 @@ if($obj = $result->fetch_object()) {
 					</tr>
 	
 				</table>
-				<table style="float: right;">	
+				<table class="right-table">	
 					<tr>
 						<td><i>Email:</i></td>
 						<td>'.$obj->email.'</td>
@@ -147,7 +76,7 @@ if($obj = $result->fetch_object()) {
 	
 			<div class="eduction">
 			<h3><b>EDUCATION</b></h3>
-			<div class="table" style="border-top: 1px solid black;"	>
+			<div class="table"	>
 				<br>
 				<table>	
 					<tr>
@@ -170,7 +99,7 @@ if($obj = $result->fetch_object()) {
 			</div>
 			<div class="eduction">
 			<h3><b>SKILLS</b></h3>
-			<div class="table" style="border-top: 1px solid black;"	>
+			<div class="table">
 				<br>
 				<table>	
 
@@ -195,9 +124,9 @@ if($obj = $result->fetch_object()) {
 	
 			<div class="pitch">
 			<h3><b>PITCH</b></h3>
-			<div class="table" style="border-top: 1px solid black;"	>
+			<div class="table">
 				<br>
-				<p style="font-size:20px; font-weight:10px; text-align:center; padding:10px 50px;">"	'.$obj->pitch.'"</p>
+				<p>"	'.$obj->pitch.'"</p>
 			</div>
 			</div>
 	
