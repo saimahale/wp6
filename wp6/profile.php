@@ -1,3 +1,132 @@
+<?php 
+ session_start();
+
+if (isset($_POST['submit']))
+ {
+
+	$firstname=$_POST["firstname"];
+	$lastname=$_POST["lastname"];
+	$gender=$_POST["gender"];
+	$email=$_POST["email"];
+	$phone=$_POST["phone"];
+	$state=$_POST["state"];
+	$city=$_POST["city"];
+	$graduation=$_POST["graduation"];
+	$grade=$_POST["grade"];
+	$gyear=$_POST["gyear"];
+	$spec=$_POST["spec"];
+	$college=$_POST["college"];
+	$priskill=$_POST["priskill"];
+	$secskill=$_POST["secskill"];
+	$certificate=$_POST["certificate"];
+	$pitch=$_POST["pitch"];
+
+
+	/*Start validating data*/
+	$pattern = "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^";  
+	$length = strlen($phone);  
+ 
+	if (!preg_match ("/^[0-9]*$/", $phone) ){  
+    echo '<script language="javascript">
+                alert("mobile are allowed Number.");
+                 window.history.back();
+            </script>';
+	}  
+	else if ( $length < 10 || $length > 10) {  
+	    echo '<script language="javascript">
+	                alert("Mobile must have 10 digits.");
+	                 window.history.back();
+	            </script>';  
+	}
+	else if (!preg_match ("/^[a-zA-z]*$/", $firstname) ) {  
+	    echo '<script language="javascript">
+	                alert("Name are allowed alphabets and whitespace.");
+	                 window.history.back();
+	            </script>';  
+	}
+	else if (!preg_match ("/^[a-zA-z]*$/", $city) ) {  
+	    echo '<script language="javascript">
+	                alert("City Name are allowed alphabets and whitespace.");
+	                 window.history.back();
+	            </script>';  
+	}
+	else if (!preg_match ($pattern, $email) ) {  
+	    echo '<script language="javascript">
+	                alert("Email is not valid.");
+	                 window.history.back();
+	            </script>';  
+	}
+/*end validating data*/
+/*Start inserting data into database*/
+else{
+extract($_POST);
+$error=array();
+$extension=array("jpeg","jpg","png","JPG","JPEG","PNG");
+foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name) {
+    $file_name=$_FILES["files"]["name"][$key];
+    $file_tmp=$_FILES["files"]["tmp_name"][$key];
+    $ext=pathinfo($file_name,PATHINFO_EXTENSION);
+
+    if(in_array($ext,$extension)) {
+        if(!file_exists("./image/".$file_name)) {
+            move_uploaded_file($file_tmp=$_FILES["files"]["tmp_name"][$key],"./image/".$file_name);
+
+            include "connection.php";   
+            $result= $conn->query("INSERT INTO profile(firstname, lastname, gender, email, phone, state, city, files, graduation, grade, gyear, spec, college, preskill, secskill, certificate, pitch) VALUES ('$firstname','$lastname','$gender','$email','$phone','$state','$city','$file_name','$graduation','$grade','$gyear','$spec','$college','$priskill','$secskill','$certificate','$pitch')");
+            if ($result) {
+            	$_SESSION['id']=$conn->insert_id;
+
+                mysqli_close($conn);
+                echo '<script language="javascript">
+                alert("Data Submitted Successfully.");
+                 location.replace("./view.php");
+            </script>';
+            }
+            else{
+                mysqli_close($conn);
+                echo '<script language="javascript">
+                alert("Data not Successfully.");
+                 window.history.back();
+            </script>';
+            }
+        }
+        else {
+            $filename=basename($file_name,$ext);
+            $newFileName=$filename.time().".".$ext;
+            move_uploaded_file($file_tmp=$_FILES["files"]["tmp_name"][$key],"./image/".$newFileName);
+            include "connection.php";
+            $result1= $conn->query("INSERT INTO profile(firstname, lastname, gender, email, phone, state, city, files, graduation, grade, gyear, spec, college, preskill, secskill, certificate, pitch) VALUES ('$firstname','$lastname','$gender','$email','$phone','$state','$city','$newFileName','$graduation','$grade','$gyear','$spec','$college','$priskill','$secskill','$certificate','$pitch')");
+            if ($result1) {
+            	$_SESSION['id']=$conn->insert_id;
+
+                mysqli_close($conn);
+                echo '<script language="javascript">
+                alert("Data Submitted Successfully.");
+                 location.replace("./view.php");
+            </script>';
+            }
+            else{
+                mysqli_close($conn);
+                echo '<script language="javascript">
+                alert("Data not Submitted .");
+                 window.history.back();
+            </script>';
+            }
+        }
+           
+        }
+    else {
+        array_push($error,"$file_name, ");
+    }
+
+}
+}
+}
+/*end insertion of data*/
+
+ ?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +139,7 @@
 		<div class="content">
 
 		<!-- Start form -->
-			<form action="upload.php" method="POST" enctype="multipart/form-data">
+			<form method="POST" enctype="multipart/form-data">
 			<!-- Start Personal Information -->
 			<div class="title">Personal:</div><br>
 			<div class="user-details">
@@ -120,8 +249,8 @@
 			
 			
 				<div class="input-box">
-					<span class="details">Upload Photo</span>
-					<input type="file" name="files[]" placeholder="" />
+					<span class="details">Upload Photo<i style="color: red">*</i></span>
+					<input type="file" name="files[]" placeholder="" required="" />
 				</div>
 			</div>
 			<!-- End Personal Information -->
@@ -204,7 +333,7 @@
 			<!-- End Pitch -->
 
 		<div class="btn">
-			<button type="submit" >Submit</button>
+			<button type="submit" name="submit">Submit</button>
 			<button type="reset">reset</button>
 		</div>
 
@@ -213,6 +342,8 @@
 		<!-- End Form -->	
 		</div>
 	</div>
+
+
 
 </body>
 </html>
